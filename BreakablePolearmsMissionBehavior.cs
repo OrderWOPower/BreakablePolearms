@@ -34,13 +34,13 @@ namespace BreakablePolearms
         {
             int affectorWeaponSlotOrMissileIndex = collisionData.AffectorWeaponSlotOrMissileIndex;
             MissionWeapon weapon = affectorWeaponSlotOrMissileIndex >= 0 ? attacker.Equipment[affectorWeaponSlotOrMissileIndex] : MissionWeapon.Invalid;
-            WeaponComponentData weaponComponentData = weapon.CurrentUsageItem;
+            WeaponComponentData currentUsageItem = weapon.CurrentUsageItem;
             BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
-            if (weaponComponentData != null && weaponComponentData.IsPolearm && ((weaponComponentData.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weaponComponentData.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)) && _weaponHitPoints.ContainsKey(attacker))
+            if (currentUsageItem != null && currentUsageItem.IsPolearm && ((currentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (currentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)) && _weaponHitPoints.ContainsKey(attacker))
             {
-                int initialHitPoints = weaponComponentData.Handling * (weaponComponentData.SwingDamageType == DamageTypes.Invalid ? settings.NonSwingingPolearmHitPointsMultiplier : settings.SwingingPolearmHitPointsMultiplier);
+                int initialHitPoints = currentUsageItem.Handling * (currentUsageItem.SwingDamageType == DamageTypes.Invalid ? settings.NonSwingingPolearmHitPointsMultiplier : settings.SwingingPolearmHitPointsMultiplier);
                 int currentHitPoints = _weaponHitPoints[attacker] > 0 ? _weaponHitPoints[attacker] : initialHitPoints;
-                int damage = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * settings.DamageToPolearmsMultiplier);
+                int damage = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
                 damage -= (int)(damage * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.DamageReductionToPolearmsMultiplier / 100f), 1f));
                 currentHitPoints -= damage;
                 _weaponHitPoints[attacker] = currentHitPoints;

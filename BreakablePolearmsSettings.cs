@@ -30,11 +30,15 @@ namespace BreakablePolearms
         [SettingPropertyGroup("Swinging Polearms", GroupOrder = 1)]
         public int SwingingPolearmHitPointsMultiplier { get; set; } = 40;
 
-        [SettingPropertyFloatingInteger("Damage to Polearms", 0.0f, 10.0f, "0.0", Order = 0, RequireRestart = false, HintText = "Multiplier for damage to polearms. Default is 1.0.")]
+        [SettingPropertyFloatingInteger("Damage to Polearms for PCs", 0.0f, 10.0f, "0.0", Order = 0, RequireRestart = false, HintText = "Multiplier for damage to polearms for player characters. Default is 1.0.")]
         [SettingPropertyGroup("Multipliers", GroupOrder = 2)]
-        public float DamageToPolearmsMultiplier { get; set; } = 1.0f;
+        public float DamageToPolearmsForPlayersMultiplier { get; set; } = 1.0f;
 
-        [SettingPropertyFloatingInteger("Damage Reduction to Polearms", 0.00f, 0.33f, "#0.00\\%", Order = 1, RequireRestart = false, HintText = "Multiplier for damage reduction to polearms relative to Polearm skill. Default is 0.33%.")]
+        [SettingPropertyFloatingInteger("Damage to Polearms for NPCs", 0.0f, 10.0f, "0.0", Order = 1, RequireRestart = false, HintText = "Multiplier for damage to polearms for non-player characters. Default is 1.0.")]
+        [SettingPropertyGroup("Multipliers", GroupOrder = 2)]
+        public float DamageToPolearmsForNonPlayersMultiplier { get; set; } = 1.0f;
+
+        [SettingPropertyFloatingInteger("Damage Reduction to Polearms", 0.00f, 0.33f, "#0.00\\%", Order = 2, RequireRestart = false, HintText = "Multiplier for damage reduction to polearms relative to Polearm skill. Default is 0.33%.")]
         [SettingPropertyGroup("Multipliers", GroupOrder = 2)]
         public float DamageReductionToPolearmsMultiplier { get; set; } = 0.33f;
     }
