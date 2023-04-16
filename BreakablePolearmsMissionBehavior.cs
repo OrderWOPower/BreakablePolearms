@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HarmonyLib;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -6,14 +7,25 @@ using TaleWorlds.MountAndBlade;
 
 namespace BreakablePolearms
 {
+    [HarmonyPatch(typeof(Mission), "GetAttackCollisionResults")]
     public class BreakablePolearmsMissionBehavior : MissionBehavior
     {
+        private static Agent _attacker;
+        private static Agent _victim;
+        private static float _hitSpeed;
         private readonly Dictionary<Agent, int> _weaponHitPoints = new Dictionary<Agent, int>();
         private readonly List<MissionWeapon> _brokenWeapons = new List<MissionWeapon>();
         private readonly bool[] _hasDisplayedHitPoints = new bool[3];
         private SoundEvent _breakSound;
 
         public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
+
+        private static void Postfix(CombatLogData __result, Agent attackerAgent, Agent victimAgent)
+        {
+            _attacker = attackerAgent;
+            _victim = victimAgent;
+            _hitSpeed = __result.HitSpeed;
+        }
 
         public override void OnAgentBuild(Agent agent, Banner banner)
         {
@@ -26,10 +38,11 @@ namespace BreakablePolearms
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow) => _weaponHitPoints.Remove(affectedAgent);
 
         // Determine what types of polearms to deal damage to.
-        // Initialize a polearm's HP relative to its handling.
+        // Initialize a polearm's HP based on its handling.
         // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor.
         // If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
-        // Reduce damage to the polearm relative to the wielder's Polearm skill.
+        // Increase damage to the polearm based on relative movement speed.
+        // Decrease damage to the polearm based on the wielder's Polearm skill.
         public override void OnMeleeHit(Agent attacker, Agent victim, bool isCanceled, AttackCollisionData collisionData)
         {
             int affectorWeaponSlotOrMissileIndex = collisionData.AffectorWeaponSlotOrMissileIndex;
@@ -41,7 +54,11 @@ namespace BreakablePolearms
                 int initialHitPoints = currentUsageItem.Handling * (currentUsageItem.SwingDamageType == DamageTypes.Invalid ? settings.NonSwingingPolearmHitPointsMultiplier : settings.SwingingPolearmHitPointsMultiplier);
                 int currentHitPoints = _weaponHitPoints[attacker] > 0 ? _weaponHitPoints[attacker] : initialHitPoints;
                 int damage = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
-                damage -= (int)(damage * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.DamageReductionToPolearmsMultiplier / 100f), 1f));
+                if (attacker == _attacker && victim == _victim)
+                {
+                    damage += (int)(damage * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
+                }
+                damage -= (int)(damage * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
                 currentHitPoints -= damage;
                 _weaponHitPoints[attacker] = currentHitPoints;
                 if (currentHitPoints <= 0)
@@ -50,14 +67,14 @@ namespace BreakablePolearms
                 }
                 if (attacker.IsMainAgent)
                 {
-                    float percent = currentHitPoints / (initialHitPoints / 100f);
+                    int percent = MathF.Ceiling(currentHitPoints / (initialHitPoints / 100f));
                     if (percent > 0)
                     {
                         if (percent <= 75 && percent > 50)
                         {
                             if (!_hasDisplayedHitPoints[0])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + (int)percent + "%", new Color(0.375f, 0.75f, 0f, 1f)));
+                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + percent + "%", Color.Lerp(new Color(0f, 0.75f, 0f, 1f), new Color(0.75f, 0.75f, 0f, 1f), (100 - percent) / 50f)));
                             }
                             _hasDisplayedHitPoints[0] = true;
                         }
@@ -65,7 +82,7 @@ namespace BreakablePolearms
                         {
                             if (!_hasDisplayedHitPoints[1])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + (int)percent + "%", new Color(0.75f, 0.75f, 0f, 1f)));
+                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + percent + "%", Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - percent) / 50f)));
                             }
                             _hasDisplayedHitPoints[1] = true;
                         }
@@ -73,7 +90,7 @@ namespace BreakablePolearms
                         {
                             if (!_hasDisplayedHitPoints[2])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + (int)percent + "%", new Color(0.75f, 0.375f, 0f, 1f)));
+                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + percent + "%", Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - percent) / 50f)));
                             }
                             _hasDisplayedHitPoints[2] = true;
                         }
