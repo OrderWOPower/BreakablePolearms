@@ -42,7 +42,7 @@ namespace BreakablePolearms
         [SettingPropertyGroup("Multipliers", GroupOrder = 2)]
         public float SpeedBasedDamageIncrementToPolearmsMultiplier { get; set; } = 0.1f;
 
-        [SettingPropertyFloatingInteger("Skill-based Damage Decrement to Polearms", 0.00f, 0.33f, "#0.00\\%", Order = 3, RequireRestart = false, HintText = "Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%.")]
+        [SettingPropertyFloatingInteger("Skill-based Damage Decrement to Polearms", 0.00f, 1.00f, "#0.00\\%", Order = 3, RequireRestart = false, HintText = "Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%.")]
         [SettingPropertyGroup("Multipliers", GroupOrder = 2)]
         public float SkillBasedDamageDecrementToPolearmsMultiplier { get; set; } = 0.33f;
     }
