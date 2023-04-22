@@ -13,9 +13,9 @@ namespace BreakablePolearms
         private static Agent _attacker;
         private static Agent _victim;
         private static float _hitSpeed;
-        private readonly Dictionary<Agent, int> _weaponHitPoints = new Dictionary<Agent, int>();
-        private readonly List<MissionWeapon> _brokenWeapons = new List<MissionWeapon>();
-        private readonly bool[] _hasDisplayedHitPoints = new bool[3];
+        private readonly Dictionary<Agent, int> _weaponHitPoints;
+        private readonly List<MissionWeapon> _brokenWeapons;
+        private readonly bool[] _hasDisplayedHitPoints;
         private SoundEvent _breakSound;
 
         public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
@@ -25,6 +25,13 @@ namespace BreakablePolearms
             _attacker = attackerAgent;
             _victim = victimAgent;
             _hitSpeed = __result.HitSpeed;
+        }
+
+        public BreakablePolearmsMissionBehavior()
+        {
+            _weaponHitPoints = new Dictionary<Agent, int>();
+            _brokenWeapons = new List<MissionWeapon>();
+            _hasDisplayedHitPoints = new bool[3];
         }
 
         public override void OnAgentBuild(Agent agent, Banner banner)
