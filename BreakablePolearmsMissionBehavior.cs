@@ -60,17 +60,17 @@ namespace BreakablePolearms
                 int initialHitPoints = currentUsageItem.Handling * (currentUsageItem.SwingDamageType == DamageTypes.Invalid ? settings.NonSwingingPolearmHitPointsMultiplier : settings.SwingingPolearmHitPointsMultiplier);
                 int currentHitPoints = _weaponHitPoints[attacker] > 0 ? _weaponHitPoints[attacker] : initialHitPoints;
                 // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
-                int damage = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
+                int damageToWeapon = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
                 
                 if (attacker == _attacker && victim == _victim)
                 {
                     // Increase damage to the polearm based on relative movement speed.
-                    damage += (int)(damage * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
+                    damageToWeapon += (int)(damageToWeapon * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
                 }
 
                 // Decrease damage to the polearm based on the wielder's Polearm skill.
-                damage -= (int)(damage * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
-                currentHitPoints -= damage;
+                damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
+                currentHitPoints -= damageToWeapon;
 
                 _weaponHitPoints[attacker] = currentHitPoints;
 
