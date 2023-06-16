@@ -54,7 +54,7 @@ namespace BreakablePolearms
             BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
 
             // Determine what types of polearms to deal damage to.
-            if (!weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && currentUsageItem != null && currentUsageItem.IsPolearm && ((currentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (currentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)) && _weaponHitPoints.ContainsKey(attacker))
+            if (_weaponHitPoints.ContainsKey(attacker) && !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && currentUsageItem != null && currentUsageItem.IsPolearm && ((currentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (currentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
             {
                 // Initialize a polearm's HP based on its handling.
                 int initialHitPoints = currentUsageItem.Handling * (currentUsageItem.SwingDamageType == DamageTypes.Invalid ? settings.NonSwingingPolearmHitPointsMultiplier : settings.SwingingPolearmHitPointsMultiplier);
@@ -127,22 +127,26 @@ namespace BreakablePolearms
 
         public override void OnMissionTick(float dt)
         {
-            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman))
+            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && _brokenWeapons.Contains(a.WieldedWeapon)))
             {
-                for (EquipmentIndex index = EquipmentIndex.WeaponItemBeginSlot; index < EquipmentIndex.ExtraWeaponSlot; index++)
-                {
-                    MissionWeapon weapon = agent.Equipment[index];
+                // If a polearm is broken, remove it from the wielder and play a breaking sound.
+                agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
 
-                    if (_brokenWeapons.Contains(weapon))
-                    {
-                        // If a polearm is broken, remove it from the wielder and play a breaking sound.
-                        agent.RemoveEquippedWeapon(index);
+                _brokenWeapons.Remove(agent.WieldedWeapon);
+                _breakSound = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken"), Mission.Scene);
+                _breakSound.PlayInPosition(agent.Position);
+            }
+        }
 
-                        _brokenWeapons.Remove(weapon);
-                        _breakSound = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken"), Mission.Scene);
-                        _breakSound.PlayInPosition(agent.Position);
-                    }
-                }
+        public override void OnItemDrop(Agent agent, SpawnedItemEntity item)
+        {
+            MissionWeapon weapon = item.WeaponCopy;
+            WeaponComponentData currentUsageItem = weapon.CurrentUsageItem;
+            BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
+
+            if (_weaponHitPoints.ContainsKey(agent) && !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && currentUsageItem != null && currentUsageItem.IsPolearm && ((currentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (currentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
+            {
+                _weaponHitPoints[agent] = 0;
             }
         }
     }
