@@ -130,9 +130,10 @@ namespace BreakablePolearms
             foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && _brokenWeapons.Contains(a.WieldedWeapon)))
             {
                 // If a polearm is broken, remove it from the wielder and play a breaking sound.
+                _brokenWeapons.Remove(agent.WieldedWeapon);
+
                 agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
 
-                _brokenWeapons.Remove(agent.WieldedWeapon);
                 _breakSound = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken"), Mission.Scene);
                 _breakSound.PlayInPosition(agent.Position);
             }
