@@ -17,8 +17,7 @@ namespace BreakablePolearms
         private readonly Dictionary<Agent, int> _weaponHitPoints;
         private readonly List<MissionWeapon> _brokenWeapons;
         private readonly bool[] _hasDisplayedHitPoints;
-
-        private SoundEvent _breakSound;
+        private readonly int _breakSoundIndex;
 
         public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
 
@@ -34,7 +33,10 @@ namespace BreakablePolearms
             _weaponHitPoints = new Dictionary<Agent, int>();
             _brokenWeapons = new List<MissionWeapon>();
             _hasDisplayedHitPoints = new bool[3];
+            _breakSoundIndex = SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken");
         }
+
+        public override void OnBehaviorInitialize() => Mission.OnItemDrop += OnItemDrop;
 
         public override void OnAgentBuild(Agent agent, Banner banner)
         {
@@ -61,7 +63,7 @@ namespace BreakablePolearms
                 int currentHitPoints = _weaponHitPoints[attacker] > 0 ? _weaponHitPoints[attacker] : initialHitPoints;
                 // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
                 int damageToWeapon = (int)((collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor) * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
-                
+
                 if (attacker == _attacker && victim == _victim)
                 {
                     // Increase damage to the polearm based on relative movement speed.
@@ -129,19 +131,17 @@ namespace BreakablePolearms
         {
             foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && _brokenWeapons.Contains(a.WieldedWeapon)))
             {
-                // If a polearm is broken, remove it from the wielder and play a breaking sound.
                 _brokenWeapons.Remove(agent.WieldedWeapon);
 
+                // If a polearm is broken, remove it from the wielder and play a breaking sound.
                 agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
-
-                _breakSound = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken"), Mission.Scene);
-                _breakSound.PlayInPosition(agent.Position);
+                Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
             }
         }
 
-        public override void OnItemDrop(Agent agent, SpawnedItemEntity item)
+        public void OnItemDrop(Agent agent, SpawnedItemEntity spawnedItem)
         {
-            MissionWeapon weapon = item.WeaponCopy;
+            MissionWeapon weapon = spawnedItem.WeaponCopy;
             WeaponComponentData currentUsageItem = weapon.CurrentUsageItem;
             BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
 
