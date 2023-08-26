@@ -20,9 +20,9 @@
   <string id="BreakableOpt006" text="NPCから長柄武器へのダメージ"/>
   <string id="BreakableOpt006Hint" text="NPCが長柄武器へ与えるダメージの倍率です。デフォルトは「1.0」です。"/>
   <string id="BreakableOpt007" text="長柄武器のスピードボーナス"/>
-  <string id="BreakableOpt007Hint" text="相対速度によって上乗せされる長柄武器のダメージ倍率です。デフォルトは「50%」です。"/>
+  <string id="BreakableOpt007Hint" text="相対速度によって上乗せされる長柄武器へのダメージの倍率です。デフォルトは「50%」です。"/>
   <string id="BreakableOpt008" text="長柄武器のスキルボーナス"/>
-  <string id="BreakableOpt008Hint" text="長柄武器スキルによって上乗せされる長柄武器のダメージ倍率です。デフォルトは「0.33%」です。"/>
+  <string id="BreakableOpt008Hint" text="長柄武器スキルによって軽減される長柄武器へのダメージの倍率です。デフォルトは「0.33%」です。"/>
   <string id="BreakableMsg001" text="長柄武器の耐久: {HPPERCENT}%"/>
   <string id="BreakableMsg002" text="長柄武器が壊れた!"/>
  </strings>
