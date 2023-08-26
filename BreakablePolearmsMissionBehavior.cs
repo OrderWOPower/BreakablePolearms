@@ -5,6 +5,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.Localization;
 
 namespace BreakablePolearms
 {
@@ -91,7 +92,7 @@ namespace BreakablePolearms
                         {
                             if (!_hasDisplayedHitPoints[0])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + hitPointsPercent + "%", Color.Lerp(new Color(0f, 0.75f, 0f, 1f), new Color(0.75f, 0.75f, 0f, 1f), (100 - hitPointsPercent) / 50f)));
+                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=BreakableMsg001}Polearm HP: {HPPERCENT}%").SetTextVariable("HPPERCENT", hitPointsPercent).ToString(), Color.Lerp(new Color(0f, 0.75f, 0f, 1f), new Color(0.75f, 0.75f, 0f, 1f), (100 - hitPointsPercent) / 50f)));
                             }
 
                             _hasDisplayedHitPoints[0] = true;
@@ -100,7 +101,7 @@ namespace BreakablePolearms
                         {
                             if (!_hasDisplayedHitPoints[1])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + hitPointsPercent + "%", Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - hitPointsPercent) / 50f)));
+                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=BreakableMsg001}Polearm HP: {HPPERCENT}%").SetTextVariable("HPPERCENT", hitPointsPercent).ToString(), Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - hitPointsPercent) / 50f)));
                             }
 
                             _hasDisplayedHitPoints[1] = true;
@@ -109,7 +110,7 @@ namespace BreakablePolearms
                         {
                             if (!_hasDisplayedHitPoints[2])
                             {
-                                InformationManager.DisplayMessage(new InformationMessage("Polearm HP: " + hitPointsPercent + "%", Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - hitPointsPercent) / 50f)));
+                                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=BreakableMsg001}Polearm HP: {HPPERCENT}%").SetTextVariable("HPPERCENT", hitPointsPercent).ToString(), Color.Lerp(new Color(0.75f, 0.75f, 0f, 1f), new Color(0.75f, 0f, 0f, 1f), (50 - hitPointsPercent) / 50f)));
                             }
 
                             _hasDisplayedHitPoints[2] = true;
@@ -117,7 +118,7 @@ namespace BreakablePolearms
                     }
                     else
                     {
-                        InformationManager.DisplayMessage(new InformationMessage("Polearm broken!", new Color(0.75f, 0f, 0f, 1f)));
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=BreakableMsg002}Polearm broken!").ToString(), new Color(0.75f, 0f, 0f, 1f)));
 
                         _hasDisplayedHitPoints[0] = false;
                         _hasDisplayedHitPoints[1] = false;

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="日本語"/>
+ </tags>
+ <strings>
+  <string id="BreakableOptG001" text="振り攻撃のない長柄武器"/>
+  <string id="BreakableOptG002" text="振り攻撃のある長柄武器"/>
+  <string id="BreakableOptG003" text="倍率"/>
+  <string id="BreakableOpt001" text="振り攻撃のない長柄武器の切り替え"/>
+  <string id="BreakableOpt001Hint" text="振り攻撃のない長柄武器のダメージの設定を有効にします。デフォルトは「有効」です。"/>
+  <string id="BreakableOpt002" text="振り攻撃のない長柄武器のHP"/>
+  <string id="BreakableOpt002Hint" text="振り攻撃のない長柄武器の耐久力です。操作性に対する倍率を表します。デフォルトは「20」です。"/>
+  <string id="BreakableOpt003" text="振り攻撃のある長柄武器の切り替え"/>
+  <string id="BreakableOpt003Hint" text="振り攻撃のある長柄武器のダメージの設定を有効にします。デフォルトは「有効」です。"/>
+  <string id="BreakableOpt004" text="振り攻撃のある長柄武器のHP"/>
+  <string id="BreakableOpt004Hint" text="振り攻撃のある長柄武器の耐久力です。操作性に対する倍率を表します。デフォルトは「40」です。"/>
+  <string id="BreakableOpt005" text="プレイヤーから長柄武器へのダメージ"/>
+  <string id="BreakableOpt005Hint" text="プレイヤーキャラクターが長柄武器へ与えるダメージの倍率です。デフォルトは「1.0」です。"/>
+  <string id="BreakableOpt006" text="NPCから長柄武器へのダメージ"/>
+  <string id="BreakableOpt006Hint" text="NPCが長柄武器へ与えるダメージの倍率です。デフォルトは「1.0」です。"/>
+  <string id="BreakableOpt007" text="長柄武器のスピードボーナス"/>
+  <string id="BreakableOpt007Hint" text="相対速度によって上乗せされる長柄武器へのダメージの倍率です。デフォルトは「50%」です。"/>
+  <string id="BreakableOpt008" text="長柄武器のスキルボーナス"/>
+  <string id="BreakableOpt008Hint" text="長柄武器スキルによって軽減される長柄武器へのダメージの倍率です。デフォルトは「0.33%」です。"/>
+  <string id="BreakableMsg001" text="長柄武器の耐久: {HPPERCENT}%"/>
+  <string id="BreakableMsg002" text="長柄武器が壊れた!"/>
+ </strings>
+</base>
