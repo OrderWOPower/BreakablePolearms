@@ -4,8 +4,8 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 
 namespace BreakablePolearms
 {

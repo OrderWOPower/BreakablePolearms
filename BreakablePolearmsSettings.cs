@@ -18,7 +18,7 @@ namespace BreakablePolearms
         [SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
         public bool ShouldDamageNonSwingingPolearms { get; set; } = true;
 
-        [SettingPropertyInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 1, 100, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Multipler for a non-swinging polearm's HP based on its handling. Default is 20.")]
+        [SettingPropertyInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 1, 100, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Multiplier for a non-swinging polearm's HP based on its handling. Default is 20.")]
         [SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
         public int NonSwingingPolearmHitPointsMultiplier { get; set; } = 20;
 
@@ -26,7 +26,7 @@ namespace BreakablePolearms
         [SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
         public bool ShouldDamageSwingingPolearms { get; set; } = true;
 
-        [SettingPropertyInteger("{=BreakableOpt004}HP of Swinging Polearms", 1, 100, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Multipler for a swinging polearm's HP based on its handling. Default is 40.")]
+        [SettingPropertyInteger("{=BreakableOpt004}HP of Swinging Polearms", 1, 100, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Multiplier for a swinging polearm's HP based on its handling. Default is 40.")]
         [SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
         public int SwingingPolearmHitPointsMultiplier { get; set; } = 40;
 
@@ -34,11 +34,11 @@ namespace BreakablePolearms
         [SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
         public float DamageToPolearmsForPlayersMultiplier { get; set; } = 1.0f;
 
-        [SettingPropertyFloatingInteger("{=BreakableOpt006}Damage to Polearms for NPCs", 0.0f, 10.0f, "0.0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt006}Multiplier for damage to polearms for non-player characters. Default is 1.0.")]
+        [SettingPropertyFloatingInteger("{=BreakableOpt006}Damage to Polearms for NPCs", 0.0f, 10.0f, "0.0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt006Hint}Multiplier for damage to polearms for non-player characters. Default is 1.0.")]
         [SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
         public float DamageToPolearmsForNonPlayersMultiplier { get; set; } = 1.0f;
 
-        [SettingPropertyFloatingInteger("{=BreakableOpt007}Speed-based Damage Increment to Polearms", 0.0f, 1.0f, "#0%", Order = 2, RequireRestart = false, HintText = "{=BreakableOpt007}Multiplier for damage increment to polearms based on relative movement speed. Default is 50%.")]
+        [SettingPropertyFloatingInteger("{=BreakableOpt007}Speed-based Damage Increment to Polearms", 0.0f, 1.0f, "#0%", Order = 2, RequireRestart = false, HintText = "{=BreakableOpt007Hint}Multiplier for damage increment to polearms based on relative movement speed. Default is 50%.")]
         [SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
         public float SpeedBasedDamageIncrementToPolearmsMultiplier { get; set; } = 0.5f;
 
