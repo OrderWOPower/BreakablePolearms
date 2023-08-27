@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="简体中文"/>
+ </tags>
+ <strings>
+  <string id="BreakableOptG001" text="非挥击长杆武器"/>
+  <string id="BreakableOptG002" text="挥击长杆武器"/>
+  <string id="BreakableOptG003" text="乘数"/>
+  <string id="BreakableOpt001" text="切换非挥击长杆武器"/>
+  <string id="BreakableOpt001Hint" text="对非挥击长杆武器造成伤害。默认启用。"/>
+  <string id="BreakableOpt002" text="非挥击长杆武器HP"/>
+  <string id="BreakableOpt002Hint" text="基于其操控性非挥击长杆武器HP的乘数。默认为20。"/>
+  <string id="BreakableOpt003" text="切换挥击长杆武器"/>
+  <string id="BreakableOpt003Hint" text="对挥击长杆武器造成伤害。默认启用。"/>
+  <string id="BreakableOpt004" text="挥击长杆武器HP"/>
+  <string id="BreakableOpt004Hint" text="基于其操控性挥击长杆武器HP的乘数。默认为40。"/>
+  <string id="BreakableOpt005" text="PC长杆武器受到伤害"/>
+  <string id="BreakableOpt005Hint" text="玩家角色长杆武器受到伤害的乘数。默认为1.0。"/>
+  <string id="BreakableOpt006" text="NPC长杆武器受到伤害"/>
+  <string id="BreakableOpt006Hint" text="非玩家角色长杆武器受到伤害的乘数。默认为1.0。"/>
+  <string id="BreakableOpt007" text="基于速度长杆武器受到伤害的增量"/>
+  <string id="BreakableOpt007Hint" text="基于相对移动速度长杆武器受到伤害的增量乘数。默认为50%。"/>
+  <string id="BreakableOpt008" text="基于技能长杆武器受到伤害的减量"/>
+  <string id="BreakableOpt008Hint" text="基于长杆武器技能长杆武器受到伤害的减量乘数。默认为0.33%。"/>
+  <string id="BreakableMsg001" text="长杆武器HP：{HPPERCENT}%"/>
+  <string id="BreakableMsg002" text="长杆武器折断！"/>
+ </strings>
+</base>

@@ -10,11 +10,11 @@
   <string id="BreakableOpt001" text="Toggle Non-Swinging Polearms"/>
   <string id="BreakableOpt001Hint" text="Deal damage to non-swinging polearms. Enabled by default."/>
   <string id="BreakableOpt002" text="HP of Non-Swinging Polearms"/>
-  <string id="BreakableOpt002Hint" text="Multipler for a non-swinging polearm's HP based on its handling. Default is 20."/>
+  <string id="BreakableOpt002Hint" text="Multiplier for a non-swinging polearm's HP based on its handling. Default is 20."/>
   <string id="BreakableOpt003" text="Toggle Swinging Polearms"/>
   <string id="BreakableOpt003Hint" text="Deal damage to swinging polearms. Enabled by default."/>
   <string id="BreakableOpt004" text="HP of Swinging Polearms"/>
-  <string id="BreakableOpt004Hint" text="Multipler for a swinging polearm's HP based on its handling. Default is 40."/>
+  <string id="BreakableOpt004Hint" text="Multiplier for a swinging polearm's HP based on its handling. Default is 40."/>
   <string id="BreakableOpt005" text="Damage to Polearms for PCs"/>
   <string id="BreakableOpt005Hint" text="Multiplier for damage to polearms for player characters. Default is 1.0."/>
   <string id="BreakableOpt006" text="Damage to Polearms for NPCs"/>
