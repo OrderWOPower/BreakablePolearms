@@ -16,12 +16,6 @@ namespace BreakablePolearms
             new Harmony("mod.bannerlord.breakablepolearms").PatchAll();
         }
 
-        public override void OnBeforeMissionBehaviorInitialize(Mission mission)
-        {
-            if (mission.SceneName != "training_field_2")
-            {
-                mission.AddMissionBehavior(new BreakablePolearmsMissionBehavior());
-            }
-        }
+        public override void OnBeforeMissionBehaviorInitialize(Mission mission) => mission.AddMissionBehavior(new BreakablePolearmsMissionBehavior());
     }
 }
