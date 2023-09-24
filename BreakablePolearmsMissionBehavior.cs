@@ -44,6 +44,7 @@ namespace BreakablePolearms
 
         public override void OnMeleeHit(Agent attacker, Agent victim, bool isCanceled, AttackCollisionData collisionData)
         {
+            // Disable damage to polearms in the training field.
             if (Mission.SceneName != "training_field_2")
             {
                 int affectorWeaponSlotOrMissileIndex = collisionData.AffectorWeaponSlotOrMissileIndex;
