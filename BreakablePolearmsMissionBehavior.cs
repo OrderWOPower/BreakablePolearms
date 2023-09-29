@@ -36,7 +36,8 @@ namespace BreakablePolearms
 
                     if (IsPolearmBreakable(weapon))
                     {
-                        agent.ChangeWeaponHitPoints(index, (short)GetInitialHitPoints(weapon.CurrentUsageItem));
+                        // Initialize a polearm's HP based on its handling.
+                        agent.ChangeWeaponHitPoints(index, (short)(weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier)));
                     }
                 }
             }
@@ -86,7 +87,7 @@ namespace BreakablePolearms
 
                 if (IsPolearmBreakable(weapon))
                 {
-                    mixin.UpdateWeaponStatuses(weapon.HitPoints, GetInitialHitPoints(weapon.CurrentUsageItem));
+                    mixin.UpdateWeaponStatuses(weapon.HitPoints, weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier));
                 }
                 else
                 {
@@ -95,9 +96,6 @@ namespace BreakablePolearms
             }
         }
 
-        public bool IsPolearmBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
-
-        // Initialize a polearm's HP based on its handling.
-        public int GetInitialHitPoints(WeaponComponentData currentUsageItem) => currentUsageItem.Handling * (currentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier);
+        private bool IsPolearmBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
     }
 }
