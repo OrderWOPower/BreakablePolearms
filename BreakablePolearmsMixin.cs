@@ -10,8 +10,7 @@ namespace BreakablePolearms
     public class BreakablePolearmsMixin : BaseViewModelMixin<MissionAgentStatusVM>
     {
         private string _weaponHitPoints;
-        private bool _isWeaponHitPointsVisible;
-        private bool _isWeaponHitPointsAlertEnabled;
+        private bool _isWeaponHitPointsVisible, _isWeaponHitPointsAlertEnabled;
 
         [DataSourceProperty]
         public string WeaponHitPoints

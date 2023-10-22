@@ -34,7 +34,7 @@ namespace BreakablePolearms
                 {
                     MissionWeapon weapon = agent.Equipment[index];
 
-                    if (IsPolearmBreakable(weapon))
+                    if (IsBreakable(weapon))
                     {
                         // Initialize a polearm's HP based on its handling.
                         agent.ChangeWeaponHitPoints(index, (short)(weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier)));
@@ -53,7 +53,7 @@ namespace BreakablePolearms
                 BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
 
                 // Determine what types of polearms to deal damage to.
-                if (IsPolearmBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
+                if (IsBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
                 {
                     // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
                     int damageToWeapon = collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor;
@@ -74,18 +74,18 @@ namespace BreakablePolearms
 
         public override void OnMissionTick(float dt)
         {
-            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && IsPolearmBreakable(a.WieldedWeapon)))
+            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && IsBreakable(a.WieldedWeapon)))
             {
                 // If a polearm is broken, remove it from the wielder and play a breaking sound.
                 agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
                 Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
             }
 
-            if (Agent.Main != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
+            if (Agent.Main != null && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
             {
                 MissionWeapon weapon = Agent.Main.WieldedWeapon;
 
-                if (IsPolearmBreakable(weapon))
+                if (IsBreakable(weapon))
                 {
                     mixin.UpdateWeaponStatuses(weapon.HitPoints, weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier));
                 }
@@ -96,6 +96,6 @@ namespace BreakablePolearms
             }
         }
 
-        private bool IsPolearmBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
+        private bool IsBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
     }
 }
