@@ -34,7 +34,7 @@ namespace BreakablePolearms
                 {
                     MissionWeapon weapon = agent.Equipment[index];
 
-                    if (IsBreakable(weapon))
+                    if (IsWeaponBreakable(weapon))
                     {
                         // Initialize a polearm's HP based on its handling.
                         agent.ChangeWeaponHitPoints(index, (short)(weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier)));
@@ -45,36 +45,32 @@ namespace BreakablePolearms
 
         public override void OnMeleeHit(Agent attacker, Agent victim, bool isCanceled, AttackCollisionData collisionData)
         {
-            // Disable damage to polearms in the training field.
-            if (Mission.SceneName != "training_field_2")
+            int affectorWeaponSlotOrMissileIndex = collisionData.AffectorWeaponSlotOrMissileIndex;
+            MissionWeapon weapon = affectorWeaponSlotOrMissileIndex >= 0 ? attacker.Equipment[affectorWeaponSlotOrMissileIndex] : MissionWeapon.Invalid;
+            BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
+
+            // Determine what types of polearms to deal damage to.
+            if (IsWeaponBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
             {
-                int affectorWeaponSlotOrMissileIndex = collisionData.AffectorWeaponSlotOrMissileIndex;
-                MissionWeapon weapon = affectorWeaponSlotOrMissileIndex >= 0 ? attacker.Equipment[affectorWeaponSlotOrMissileIndex] : MissionWeapon.Invalid;
-                BreakablePolearmsSettings settings = BreakablePolearmsSettings.Instance;
+                // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
+                int damageToWeapon = collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor;
 
-                // Determine what types of polearms to deal damage to.
-                if (IsBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
+                if (attacker == _attacker && victim == _victim)
                 {
-                    // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
-                    int damageToWeapon = collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor;
-
-                    if (attacker == _attacker && victim == _victim)
-                    {
-                        // Increase damage to the polearm based on relative movement speed.
-                        damageToWeapon += (int)(damageToWeapon * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
-                    }
-
-                    // Decrease damage to the polearm based on the wielder's Polearm skill.
-                    damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
-                    damageToWeapon *= (int)(attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier);
-                    attacker.ChangeWeaponHitPoints((EquipmentIndex)affectorWeaponSlotOrMissileIndex, (short)MathF.Max(0, weapon.HitPoints - damageToWeapon));
+                    // Increase damage to the polearm based on relative movement speed.
+                    damageToWeapon += (int)(damageToWeapon * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
                 }
+
+                // Decrease damage to the polearm based on the wielder's Polearm skill.
+                damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
+                damageToWeapon *= (int)(attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier);
+                attacker.ChangeWeaponHitPoints((EquipmentIndex)affectorWeaponSlotOrMissileIndex, (short)MathF.Max(0, weapon.HitPoints - damageToWeapon));
             }
         }
 
         public override void OnMissionTick(float dt)
         {
-            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && IsBreakable(a.WieldedWeapon)))
+            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && a.GetWieldedItemIndex(Agent.HandIndex.MainHand) != EquipmentIndex.ExtraWeaponSlot && IsWeaponBreakable(a.WieldedWeapon)))
             {
                 // If a polearm is broken, remove it from the wielder and play a breaking sound.
                 agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
@@ -85,7 +81,7 @@ namespace BreakablePolearms
             {
                 MissionWeapon weapon = Agent.Main.WieldedWeapon;
 
-                if (IsBreakable(weapon))
+                if (IsWeaponBreakable(weapon))
                 {
                     mixin.UpdateWeaponStatuses(weapon.HitPoints, weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier));
                 }
@@ -96,6 +92,6 @@ namespace BreakablePolearms
             }
         }
 
-        private bool IsBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
+        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
     }
 }
