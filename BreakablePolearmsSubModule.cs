@@ -9,7 +9,7 @@ namespace BreakablePolearms
     {
         protected override void OnSubModuleLoad()
         {
-            UIExtender uiExtender = new UIExtender("BreakablePolearms");
+            UIExtender uiExtender = UIExtender.Create("BreakablePolearms");
 
             uiExtender.Register(typeof(BreakablePolearmsSubModule).Assembly);
             uiExtender.Enable();
