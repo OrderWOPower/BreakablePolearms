@@ -92,6 +92,6 @@ namespace BreakablePolearms
             }
         }
 
-        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm;
+        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
     }
 }

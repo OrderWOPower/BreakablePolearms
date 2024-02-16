@@ -45,5 +45,9 @@ namespace BreakablePolearms
         [SettingPropertyFloatingInteger("{=BreakableOpt008}Skill-based Damage Decrement to Polearms", 0.00f, 1.00f, "#0.00\\%", Order = 3, RequireRestart = false, HintText = "{=BreakableOpt008Hint}Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%.")]
         [SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
         public float SkillBasedDamageDecrementToPolearmsMultiplier { get; set; } = 0.33f;
+
+        [SettingPropertyInteger("{=BreakableOpt009}Minimum Polearm Length", 0, 1000, "0", Order = 0, RequireRestart = false, HintText = "{=BreakableOpt009Hint}Minimum length of polearms to deal damage to. Default is 0.")]
+        [SettingPropertyGroup("{=BreakableOptG004}Limits", GroupOrder = 3)]
+        public int MinPolearmLength { get; set; } = 0;
     }
 }
