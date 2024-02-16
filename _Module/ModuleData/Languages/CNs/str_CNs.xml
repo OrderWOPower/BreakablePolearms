@@ -7,6 +7,7 @@
   <string id="BreakableOptG001" text="非挥砍长杆"/>
   <string id="BreakableOptG002" text="挥砍长杆"/>
   <string id="BreakableOptG003" text="系数"/>
+  <string id="BreakableOptG004" text="限制"/>
   <string id="BreakableOpt001" text="切换非挥砍长杆"/>
   <string id="BreakableOpt001Hint" text="开启后，非挥砍长杆获得耐久度概念。默认启用。"/>
   <string id="BreakableOpt002" text="非挥砍长杆耐久度"/>
@@ -23,5 +24,7 @@
   <string id="BreakableOpt007Hint" text="基于相对移动速度带来的长杆受损加深。默认为50%。"/>
   <string id="BreakableOpt008" text="长杆受损减免"/>
   <string id="BreakableOpt008Hint" text="基于长杆熟练度带来的长杆受损减免。默认为1点熟练度=0.33%受损减免。"/>
+  <string id="BreakableOpt009" text="最少长杆长度"/>
+  <string id="BreakableOpt009Hint" text="长杆受损的最少长度。默认为0。"/>
  </strings>
 </base>

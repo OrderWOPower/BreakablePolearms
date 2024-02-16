@@ -7,6 +7,7 @@
   <string id="BreakableOptG001" text="Non-Swinging Polearms"/>
   <string id="BreakableOptG002" text="Swinging Polearms"/>
   <string id="BreakableOptG003" text="Multipliers"/>
+  <string id="BreakableOptG004" text="Limits"/>
   <string id="BreakableOpt001" text="Toggle Non-Swinging Polearms"/>
   <string id="BreakableOpt001Hint" text="Deal damage to non-swinging polearms. Enabled by default."/>
   <string id="BreakableOpt002" text="HP of Non-Swinging Polearms"/>
@@ -23,5 +24,7 @@
   <string id="BreakableOpt007Hint" text="Multiplier for damage increment to polearms based on relative movement speed. Default is 50%."/>
   <string id="BreakableOpt008" text="Skill-based Damage Decrement to Polearms"/>
   <string id="BreakableOpt008Hint" text="Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%."/>
+  <string id="BreakableOpt009" text="Minimum Polearm Length"/>
+  <string id="BreakableOpt009Hint" text="Minimum length of polearms to deal damage to. Default is 0."/>
  </strings>
 </base>
