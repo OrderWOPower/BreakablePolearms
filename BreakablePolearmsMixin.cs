@@ -2,6 +2,7 @@
 using Bannerlord.UIExtenderEx.ViewModels;
 using System;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace BreakablePolearms
@@ -68,7 +69,9 @@ namespace BreakablePolearms
         {
             int hitPointsPercentage = MathF.Ceiling(currentHitPoints / (initialHitPoints / 100f));
 
-            WeaponHitPoints = hitPointsPercentage.ToString() + "%";
+            MBTextManager.SetTextVariable("NUMBER", hitPointsPercentage.ToString());
+
+            WeaponHitPoints = new TextObject("{=gYATKZJp}{NUMBER}%").ToString();
             IsWeaponHitPointsVisible = hitPointsPercentage > 0;
             IsWeaponHitPointsAlertEnabled = hitPointsPercentage <= 20;
         }
