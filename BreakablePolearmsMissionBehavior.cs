@@ -52,19 +52,24 @@ namespace BreakablePolearms
             // Determine what types of polearms to deal damage to.
             if (IsWeaponBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
             {
-                // If a polearm hits an agent, deal damage to the polearm equal to 1 times the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to 10 times the damage inflicted.
-                int damageToWeapon = collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage * 10 : collisionData.AbsorbedByArmor;
+                // If a polearm hits an agent, deal damage to the polearm equal to the damage absorbed by armor. If a polearm hits a shield or an entity, deal damage to the polearm equal to the damage inflicted.
+                int damageToWeapon = collisionData.AttackBlockedWithShield || collisionData.EntityExists ? collisionData.InflictedDamage : collisionData.AbsorbedByArmor;
 
-                if (attacker == _attacker && victim == _victim)
+                // Execute only if the damage dealt to the polearm is positive.
+                if (damageToWeapon > 0)
                 {
-                    // Increase damage to the polearm based on relative movement speed.
-                    damageToWeapon += (int)(damageToWeapon * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
-                }
+                    if (attacker == _attacker && victim == _victim)
+                    {
+                        // Increase damage to the polearm based on relative movement speed.
+                        damageToWeapon += (int)(damageToWeapon * (_hitSpeed * settings.SpeedBasedDamageIncrementToPolearmsMultiplier));
+                    }
 
-                // Decrease damage to the polearm based on the wielder's Polearm skill.
-                damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
-                damageToWeapon = (int)(damageToWeapon * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
-                attacker.ChangeWeaponHitPoints((EquipmentIndex)affectorWeaponSlotOrMissileIndex, (short)MathF.Max(0, weapon.HitPoints - damageToWeapon));
+                    // Decrease damage to the polearm based on the wielder's Polearm skill.
+                    damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
+                    damageToWeapon = (int)(damageToWeapon * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
+
+                    attacker.ChangeWeaponHitPoints((EquipmentIndex)affectorWeaponSlotOrMissileIndex, (short)MathF.Max(0, weapon.HitPoints - damageToWeapon));
+                }
             }
         }
 
