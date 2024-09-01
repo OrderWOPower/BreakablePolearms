@@ -37,7 +37,7 @@ namespace BreakablePolearms
                     if (IsWeaponBreakable(weapon))
                     {
                         // Initialize a polearm's HP based on its handling.
-                        agent.ChangeWeaponHitPoints(index, (short)(weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier)));
+                        agent.ChangeWeaponHitPoints(index, (short)InitialHitPoints(weapon));
                     }
                 }
             }
@@ -75,11 +75,21 @@ namespace BreakablePolearms
 
         public override void OnMissionTick(float dt)
         {
-            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && a.GetWieldedItemIndex(Agent.HandIndex.MainHand) != EquipmentIndex.ExtraWeaponSlot && IsWeaponBreakable(a.WieldedWeapon)))
+            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.GetWieldedItemIndex(Agent.HandIndex.MainHand) != EquipmentIndex.ExtraWeaponSlot && IsWeaponBreakable(a.WieldedWeapon)))
             {
-                // If a polearm is broken, remove it from the wielder and play a breaking sound.
-                agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
-                Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+                MissionWeapon weapon = agent.WieldedWeapon;
+
+                if (weapon.HitPoints == 0)
+                {
+                    // If a polearm is broken, remove it from the wielder and play a breaking sound.
+                    agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
+                    Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+                }
+                else if (weapon.HitPoints > InitialHitPoints(weapon))
+                {
+                    // Ensure that the polearm's current hit points are not more than than its initial hit points.
+                    agent.ChangeWeaponHitPoints(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand), (short)InitialHitPoints(weapon));
+                }
             }
 
             if (Agent.Main != null && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
@@ -88,7 +98,7 @@ namespace BreakablePolearms
 
                 if (IsWeaponBreakable(weapon))
                 {
-                    mixin.UpdateWeaponStatuses(weapon.HitPoints, weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier));
+                    mixin.UpdateWeaponStatuses(weapon.HitPoints, InitialHitPoints(weapon));
                 }
                 else
                 {
@@ -98,5 +108,7 @@ namespace BreakablePolearms
         }
 
         private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
+
+        private int InitialHitPoints(MissionWeapon weapon) => weapon.CurrentUsageItem.Handling * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier);
     }
 }
