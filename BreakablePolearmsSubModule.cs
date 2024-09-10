@@ -1,5 +1,4 @@
 ﻿using Bannerlord.UIExtenderEx;
-using HarmonyLib;
 using TaleWorlds.MountAndBlade;
 
 namespace BreakablePolearms
@@ -13,7 +12,6 @@ namespace BreakablePolearms
 
             uiExtender.Register(typeof(BreakablePolearmsSubModule).Assembly);
             uiExtender.Enable();
-            new Harmony("mod.bannerlord.breakablepolearms").PatchAll();
         }
 
         public override void OnBeforeMissionBehaviorInitialize(Mission mission)

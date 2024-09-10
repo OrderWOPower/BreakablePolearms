@@ -65,9 +65,9 @@ namespace BreakablePolearms
 
         public BreakablePolearmsMixin(MissionAgentStatusVM missionAgentStatusVM) : base(missionAgentStatusVM) => MixinWeakReference = new WeakReference<BreakablePolearmsMixin>(this);
 
-        public void UpdateWeaponStatuses(int currentHitPoints, int initialHitPoints)
+        public void UpdateWeaponStatuses(int hitPoints, int maxHitPoints)
         {
-            int hitPointsPercentage = MathF.Ceiling(currentHitPoints / (initialHitPoints / 100f));
+            int hitPointsPercentage = MathF.Ceiling(hitPoints / (maxHitPoints / 100f));
 
             MBTextManager.SetTextVariable("NUMBER", hitPointsPercentage.ToString());
 
