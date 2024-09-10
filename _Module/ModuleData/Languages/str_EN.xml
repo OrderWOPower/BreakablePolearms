@@ -11,20 +11,18 @@
   <string id="BreakableOpt001" text="Toggle Non-Swinging Polearms"/>
   <string id="BreakableOpt001Hint" text="Deal damage to non-swinging polearms. Enabled by default."/>
   <string id="BreakableOpt002" text="HP of Non-Swinging Polearms"/>
-  <string id="BreakableOpt002Hint" text="Multiplier for a non-swinging polearm's HP based on its handling. Default is 20."/>
+  <string id="BreakableOpt002Hint" text="Multiplier for a non-swinging polearm's HP based on its handling. Default is 2."/>
   <string id="BreakableOpt003" text="Toggle Swinging Polearms"/>
   <string id="BreakableOpt003Hint" text="Deal damage to swinging polearms. Enabled by default."/>
   <string id="BreakableOpt004" text="HP of Swinging Polearms"/>
-  <string id="BreakableOpt004Hint" text="Multiplier for a swinging polearm's HP based on its handling. Default is 40."/>
+  <string id="BreakableOpt004Hint" text="Multiplier for a swinging polearm's HP based on its handling. Default is 4."/>
   <string id="BreakableOpt005" text="Damage to Polearms for PCs"/>
   <string id="BreakableOpt005Hint" text="Multiplier for damage to polearms for player characters. Default is 1.0."/>
   <string id="BreakableOpt006" text="Damage to Polearms for NPCs"/>
   <string id="BreakableOpt006Hint" text="Multiplier for damage to polearms for non-player characters. Default is 1.0."/>
-  <string id="BreakableOpt007" text="Speed-based Damage Increment to Polearms"/>
-  <string id="BreakableOpt007Hint" text="Multiplier for damage increment to polearms based on relative movement speed. Default is 50%."/>
-  <string id="BreakableOpt008" text="Skill-based Damage Decrement to Polearms"/>
-  <string id="BreakableOpt008Hint" text="Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%."/>
-  <string id="BreakableOpt009" text="Minimum Polearm Length"/>
-  <string id="BreakableOpt009Hint" text="Minimum length of polearms to deal damage to. Default is 0."/>
+  <string id="BreakableOpt007" text="Skill-based Damage Decrement to Polearms"/>
+  <string id="BreakableOpt007Hint" text="Multiplier for damage decrement to polearms based on Polearm skill. Default is 0.33%."/>
+  <string id="BreakableOpt008" text="Minimum Polearm Length"/>
+  <string id="BreakableOpt008Hint" text="Minimum length of polearms to deal damage to. Default is 0."/>
  </strings>
 </base>
