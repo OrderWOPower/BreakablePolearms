@@ -76,6 +76,6 @@ namespace BreakablePolearms
 
         private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
 
-        private int MaxHitPoints(MissionWeapon weapon) => (int)MathF.Log(weapon.GetWeaponComponentDataForUsage(0).Handling) * 100 * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier);
+        private int MaxHitPoints(MissionWeapon weapon) => (500 + ((int)MathF.Log(weapon.GetWeaponComponentDataForUsage(0).Handling, 2) * 10)) * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier);
     }
 }
