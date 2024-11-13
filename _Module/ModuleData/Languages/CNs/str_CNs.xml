@@ -11,11 +11,11 @@
   <string id="BreakableOpt001" text="切换非挥砍长杆"/>
   <string id="BreakableOpt001Hint" text="开启后，非挥砍长杆获得耐久度概念。默认启用。"/>
   <string id="BreakableOpt002" text="非挥砍长杆耐久度"/>
-  <string id="BreakableOpt002Hint" text="基于武器操控性的耐久度系数。默认耐久度=操控性乘2。"/>
+  <string id="BreakableOpt002Hint" text="武器的耐久度系数。默认耐久度=1.0。"/>
   <string id="BreakableOpt003" text="切换挥砍长杆"/>
   <string id="BreakableOpt003Hint" text="开启后，挥砍长杆获得耐久度概念。默认启用。"/>
   <string id="BreakableOpt004" text="挥砍长杆耐久度"/>
-  <string id="BreakableOpt004Hint" text="基于武器操控性的耐久度系数。默认耐久度=操控性乘4。"/>
+  <string id="BreakableOpt004Hint" text="武器的耐久度系数。默认耐久度=2.0。"/>
   <string id="BreakableOpt005" text="玩家长杆受损系数"/>
   <string id="BreakableOpt005Hint" text="玩家所持长杆受损的系数。默认为1.0。"/>
   <string id="BreakableOpt006" text="NPC长杆受损系数"/>
