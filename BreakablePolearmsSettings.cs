@@ -18,17 +18,17 @@ namespace BreakablePolearms
         [SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
         public bool ShouldDamageNonSwingingPolearms { get; set; } = true;
 
-        [SettingPropertyInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 1, 10, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Multiplier for a non-swinging polearm's HP. Default is 1.")]
+        [SettingPropertyFloatingInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 1.0f, 10.0f, "0.0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Multiplier for a non-swinging polearm's HP. Default is 1.0.")]
         [SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
-        public int NonSwingingPolearmHitPointsMultiplier { get; set; } = 1;
+        public float NonSwingingPolearmHitPointsMultiplier { get; set; } = 1.0f;
 
         [SettingPropertyBool("{=BreakableOpt003}Toggle Swinging Polearms", Order = 0, RequireRestart = false, HintText = "{=BreakableOpt003Hint}Deal damage to swinging polearms. Enabled by default.", IsToggle = true)]
         [SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
         public bool ShouldDamageSwingingPolearms { get; set; } = true;
 
-        [SettingPropertyInteger("{=BreakableOpt004}HP of Swinging Polearms", 1, 10, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Multiplier for a swinging polearm's HP. Default is 2.")]
+        [SettingPropertyFloatingInteger("{=BreakableOpt004}HP of Swinging Polearms", 1.0f, 10.0f, "0.0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Multiplier for a swinging polearm's HP. Default is 2.0.")]
         [SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
-        public int SwingingPolearmHitPointsMultiplier { get; set; } = 2;
+        public float SwingingPolearmHitPointsMultiplier { get; set; } = 2.0f;
 
         [SettingPropertyFloatingInteger("{=BreakableOpt005}Damage to Polearms for PCs", 0.0f, 10.0f, "0.0", Order = 0, RequireRestart = false, HintText = "{=BreakableOpt005Hint}Multiplier for damage to polearms for player characters. Default is 1.0.")]
         [SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
