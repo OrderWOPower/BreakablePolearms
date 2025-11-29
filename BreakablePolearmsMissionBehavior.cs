@@ -75,7 +75,7 @@ namespace BreakablePolearms
 
         private int MaxHitPoints(MissionWeapon weapon)
         {
-            int hitPoints = weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmBaseHitPoints : BreakablePolearmsSettings.Instance.SwingingPolearmBaseHitPoints;
+            int hitPoints = weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPoints : BreakablePolearmsSettings.Instance.SwingingPolearmHitPoints;
 
             // Increase the polearm's HP by 0.5% for every point of handling.
             hitPoints += (int)(hitPoints * (weapon.GetWeaponComponentDataForUsage(0).Handling / 200f));
