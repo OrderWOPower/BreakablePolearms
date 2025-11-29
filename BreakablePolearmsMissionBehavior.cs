@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -20,12 +20,10 @@ namespace BreakablePolearms
             {
                 for (EquipmentIndex index = EquipmentIndex.WeaponItemBeginSlot; index < EquipmentIndex.ExtraWeaponSlot; index++)
                 {
-                    MissionWeapon weapon = agent.Equipment[index];
-
-                    if (IsWeaponBreakable(weapon))
+                    if (IsWeaponBreakable(agent.Equipment[index]))
                     {
-                        // Initialize a polearm's HP based on its handling.
-                        agent.ChangeWeaponHitPoints(index, (short)MaxHitPoints(weapon));
+                        // Initialize a polearm's HP.
+                        agent.ChangeWeaponHitPoints(index, (short)MaxHitPoints(agent.Equipment[index]));
                     }
                 }
             }
@@ -40,25 +38,24 @@ namespace BreakablePolearms
             // Determine what types of polearms to deal damage to.
             if (IsWeaponBreakable(weapon) && ((weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid && settings.ShouldDamageNonSwingingPolearms) || (weapon.CurrentUsageItem.SwingDamageType != DamageTypes.Invalid && settings.ShouldDamageSwingingPolearms)))
             {
-                // Deal damage to the polearm equal to the damage inflicted and the damage absorbed by armor.
-                int damageToWeapon = collisionData.InflictedDamage + MathF.Max(collisionData.AbsorbedByArmor, 0);
+                // Deal damage to the polearm equal to half the damage inflicted plus the damage absorbed by armor.
+                int damageToWeapon = (collisionData.InflictedDamage / 2) + MathF.Max(collisionData.AbsorbedByArmor, 0), hitPoints;
 
                 // Decrease damage to the polearm based on the wielder's Polearm skill.
                 damageToWeapon -= (int)(damageToWeapon * MathF.Min(attacker.Character.GetSkillValue(DefaultSkills.Polearm) * (settings.SkillBasedDamageDecrementToPolearmsMultiplier / 100f), 1f));
                 damageToWeapon = (int)(damageToWeapon * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
-                attacker.ChangeWeaponHitPoints((EquipmentIndex)affectorWeaponSlotOrMissileIndex, (short)MathF.Max(0, weapon.HitPoints - damageToWeapon));
+                hitPoints = MathF.Max(0, weapon.HitPoints - damageToWeapon);
+                attacker.ChangeWeaponHitPoints(attacker.GetPrimaryWieldedItemIndex(), (short)hitPoints);
+
+                if (hitPoints == 0)
+                {
+                    BreakWeapon(attacker);
+                }
             }
         }
 
         public override void OnMissionTick(float dt)
         {
-            foreach (Agent agent in Mission.Agents.Where(a => a.IsHuman && a.WieldedWeapon.HitPoints == 0 && a.GetWieldedItemIndex(Agent.HandIndex.MainHand) != EquipmentIndex.ExtraWeaponSlot && IsWeaponBreakable(a.WieldedWeapon)))
-            {
-                // If a polearm is broken, remove it from the wielder and play a breaking sound.
-                agent.RemoveEquippedWeapon(agent.GetWieldedItemIndex(Agent.HandIndex.MainHand));
-                Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
-            }
-
             if (Agent.Main != null && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
             {
                 MissionWeapon weapon = Agent.Main.WieldedWeapon;
@@ -74,8 +71,30 @@ namespace BreakablePolearms
             }
         }
 
-        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem != null && weapon.CurrentUsageItem.IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
+        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.IsEmpty && weapon.GetWeaponComponentDataForUsage(0).IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
 
-        private int MaxHitPoints(MissionWeapon weapon) => (int)((500 + (MathF.Log(weapon.GetWeaponComponentDataForUsage(0).Handling, 2) * 10)) * (weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmHitPointsMultiplier : BreakablePolearmsSettings.Instance.SwingingPolearmHitPointsMultiplier));
+        private int MaxHitPoints(MissionWeapon weapon)
+        {
+            int hitPoints = weapon.CurrentUsageItem.SwingDamageType == DamageTypes.Invalid ? BreakablePolearmsSettings.Instance.NonSwingingPolearmBaseHitPoints : BreakablePolearmsSettings.Instance.SwingingPolearmBaseHitPoints;
+
+            // Increase the polearm's HP by 0.5% for every point of handling.
+            hitPoints += (int)(hitPoints * (weapon.GetWeaponComponentDataForUsage(0).Handling / 200f));
+            // Increase the polearm's HP by 5% for every tier above 1.
+            hitPoints += (int)(hitPoints * ((int)weapon.Item.Tier / 20f));
+
+            return hitPoints;
+        }
+
+        private async void BreakWeapon(Agent agent)
+        {
+            await Task.Delay(1);
+
+            if (agent != null && agent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && IsWeaponBreakable(agent.WieldedWeapon))
+            {
+                // If a polearm is broken, remove it from the wielder and play a breaking sound.
+                agent.RemoveEquippedWeapon(agent.GetPrimaryWieldedItemIndex());
+                Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+            }
+        }
     }
 }
