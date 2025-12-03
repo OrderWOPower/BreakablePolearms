@@ -71,7 +71,7 @@ namespace BreakablePolearms
             }
         }
 
-        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.IsEmpty && weapon.GetWeaponComponentDataForUsage(0).IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
+        private bool IsWeaponBreakable(MissionWeapon weapon) => !weapon.IsEmpty && !weapon.HasAnyUsageWithWeaponClass(WeaponClass.Javelin) && weapon.CurrentUsageItem.IsPolearm && weapon.CurrentUsageItem.WeaponLength >= BreakablePolearmsSettings.Instance.MinPolearmLength;
 
         private int MaxHitPoints(MissionWeapon weapon)
         {
