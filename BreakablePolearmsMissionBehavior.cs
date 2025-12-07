@@ -56,9 +56,11 @@ namespace BreakablePolearms
 
         public override void OnMissionTick(float dt)
         {
-            if (Agent.Main != null && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
+            Agent mainAgent = Agent.Main;
+
+            if (mainAgent != null && mainAgent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
             {
-                MissionWeapon weapon = Agent.Main.WieldedWeapon;
+                MissionWeapon weapon = mainAgent.WieldedWeapon;
 
                 if (IsWeaponBreakable(weapon))
                 {
