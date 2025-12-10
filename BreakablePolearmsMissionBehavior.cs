@@ -58,7 +58,7 @@ namespace BreakablePolearms
         {
             Agent mainAgent = Agent.Main;
 
-            if (mainAgent != null && mainAgent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
+            if (mainAgent != null && mainAgent.IsActive() && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
             {
                 MissionWeapon weapon = mainAgent.WieldedWeapon;
 
