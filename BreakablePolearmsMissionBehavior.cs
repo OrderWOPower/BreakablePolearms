@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -91,11 +92,18 @@ namespace BreakablePolearms
         {
             await Task.Delay(1);
 
-            if (agent != null && agent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && IsWeaponBreakable(agent.WieldedWeapon))
+            try
             {
-                // If a polearm is broken, remove it from the wielder and play a breaking sound.
-                agent.RemoveEquippedWeapon(agent.GetPrimaryWieldedItemIndex());
-                Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+                if (agent != null && agent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && IsWeaponBreakable(agent.WieldedWeapon))
+                {
+                    // If a polearm is broken, remove it from the wielder and play a breaking sound.
+                    agent.RemoveEquippedWeapon(agent.GetPrimaryWieldedItemIndex());
+                    Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+                }
+            }
+            catch (Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(ex.ToString()));
             }
         }
     }
