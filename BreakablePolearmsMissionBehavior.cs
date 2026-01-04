@@ -59,17 +59,24 @@ namespace BreakablePolearms
         {
             Agent mainAgent = Agent.Main;
 
-            if (mainAgent != null && mainAgent.IsActive() && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
+            if (mainAgent != null && BreakablePolearmsMixin.MixinWeakReference != null && BreakablePolearmsMixin.MixinWeakReference.TryGetTarget(out BreakablePolearmsMixin mixin))
             {
-                MissionWeapon weapon = mainAgent.WieldedWeapon;
+                try
+                {
+                    MissionWeapon weapon = mainAgent.WieldedWeapon;
 
-                if (IsWeaponBreakable(weapon))
-                {
-                    mixin.UpdateWeaponStatuses(weapon.HitPoints, MaxHitPoints(weapon));
+                    if (IsWeaponBreakable(weapon))
+                    {
+                        mixin.UpdateWeaponStatuses(weapon.HitPoints, MaxHitPoints(weapon));
+                    }
+                    else
+                    {
+                        mixin.UpdateWeaponStatuses(0, 1);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    mixin.UpdateWeaponStatuses(0, 1);
+                    InformationManager.DisplayMessage(new InformationMessage(ex.ToString()));
                 }
             }
         }
