@@ -67,7 +67,7 @@ namespace BreakablePolearms
 
         public void UpdateWeaponStatuses(int hitPoints, int maxHitPoints)
         {
-            int hitPointsPercentage = MathF.Ceiling(hitPoints / (maxHitPoints / 100f));
+            int hitPointsPercentage = MathF.Ceiling(hitPoints / (maxHitPoints / (double)100));
 
             MBTextManager.SetTextVariable("NUMBER", hitPointsPercentage.ToString());
 
