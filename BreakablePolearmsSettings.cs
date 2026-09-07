@@ -18,17 +18,17 @@ namespace BreakablePolearms
 		[SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
 		public bool ShouldDamageNonSwingingPolearms { get; set; } = true;
 
-		[SettingPropertyInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 100, 1000, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Base hit points of non-swinging polearms. Default is 200.")]
+		[SettingPropertyInteger("{=BreakableOpt002}HP of Non-Swinging Polearms", 100, 1000, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt002Hint}Base hit points of non-swinging polearms. Default is 300.")]
 		[SettingPropertyGroup("{=BreakableOptG001}Non-Swinging Polearms", GroupOrder = 0)]
-		public int NonSwingingPolearmHitPoints { get; set; } = 200;
+		public int NonSwingingPolearmHitPoints { get; set; } = 300;
 
 		[SettingPropertyBool("{=BreakableOpt003}Toggle Swinging Polearms", Order = 0, RequireRestart = false, HintText = "{=BreakableOpt003Hint}Deal damage to swinging polearms. Enabled by default.", IsToggle = true)]
 		[SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
 		public bool ShouldDamageSwingingPolearms { get; set; } = true;
 
-		[SettingPropertyInteger("{=BreakableOpt004}HP of Swinging Polearms", 100, 1000, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Base hit points of swinging polearms. Default is 300.")]
+		[SettingPropertyInteger("{=BreakableOpt004}HP of Swinging Polearms", 100, 1000, "0", Order = 1, RequireRestart = false, HintText = "{=BreakableOpt004Hint}Base hit points of swinging polearms. Default is 450.")]
 		[SettingPropertyGroup("{=BreakableOptG002}Swinging Polearms", GroupOrder = 1)]
-		public int SwingingPolearmHitPoints { get; set; } = 300;
+		public int SwingingPolearmHitPoints { get; set; } = 450;
 
 		[SettingPropertyFloatingInteger("{=BreakableOpt005}Damage to Polearms for PCs", 0.0f, 10.0f, "0.0", Order = 0, RequireRestart = false, HintText = "{=BreakableOpt005Hint}Multiplier for damage to polearms for player characters. Default is 1.0.")]
 		[SettingPropertyGroup("{=BreakableOptG003}Multipliers", GroupOrder = 2)]
