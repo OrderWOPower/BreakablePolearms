@@ -71,6 +71,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BreakablePolearmsAgentComponent.cs" />
+    <Compile Include="BreakablePolearmsHelper.cs" />
     <Compile Include="BreakablePolearmsMissionBehavior.cs" />
     <Compile Include="BreakablePolearmsMixin.cs" />
     <Compile Include="BreakablePolearmsPrefab.cs" />
