@@ -4,11 +4,17 @@ namespace BreakablePolearms
 {
 	public class BreakablePolearmsAgentComponent : AgentComponent
 	{
-		private int _weaponHitPoints;
+		private int _weaponHitPoints, _weaponIndex;
 
 		public bool IsWeaponTakingDamage { get; private set; }
 
-		public BreakablePolearmsAgentComponent(Agent agent) : base(agent) { }
+		public BreakablePolearmsAgentComponent(Agent agent) : base(agent)
+		{
+			IsWeaponTakingDamage = false;
+
+			_weaponHitPoints = 0;
+			_weaponIndex = -1;
+		}
 
 		public override void OnTick(float dt)
 		{
@@ -16,30 +22,42 @@ namespace BreakablePolearms
 
 			if (BreakablePolearmsHelper.IsWeaponBreakable(weapon))
 			{
-				if (!IsWeaponTakingDamage)
+				if ((int)Agent.GetPrimaryWieldedItemIndex() == _weaponIndex)
 				{
-					if (weapon.HitPoints >= _weaponHitPoints)
+					if (!IsWeaponTakingDamage)
 					{
-						_weaponHitPoints = weapon.HitPoints;
+						if (weapon.HitPoints >= _weaponHitPoints)
+						{
+							_weaponHitPoints = weapon.HitPoints;
+						}
+						else
+						{
+							// If a polearm's HP decreases not due to damage, change it back to its previous value.
+							Agent.ChangeWeaponHitPoints(Agent.GetPrimaryWieldedItemIndex(), (short)_weaponHitPoints);
+						}
 					}
 					else
 					{
-						// If a polearm's HP decreases not due to damage, change it back to its previous value.
-						Agent.ChangeWeaponHitPoints(Agent.GetPrimaryWieldedItemIndex(), (short)_weaponHitPoints);
+						IsWeaponTakingDamage = false;
+
+						_weaponHitPoints = weapon.HitPoints;
 					}
 				}
 				else
 				{
 					IsWeaponTakingDamage = false;
 
-					_weaponHitPoints = weapon.HitPoints;
+					_weaponHitPoints = 0;
+					_weaponIndex = (int)Agent.GetPrimaryWieldedItemIndex();
 				}
+
 			}
 			else
 			{
 				IsWeaponTakingDamage = false;
 
 				_weaponHitPoints = 0;
+				_weaponIndex = -1;
 			}
 		}
 
