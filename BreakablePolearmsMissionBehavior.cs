@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -10,25 +9,16 @@ namespace BreakablePolearms
 	public class BreakablePolearmsMissionBehavior : MissionBehavior
 	{
 		private readonly int _breakSoundIndex;
-		private readonly Dictionary<Agent, BreakablePolearmsAgentComponent> _agentComponents;
 
 		public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
 
-		public BreakablePolearmsMissionBehavior()
-		{
-			_breakSoundIndex = SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken");
-			_agentComponents = new Dictionary<Agent, BreakablePolearmsAgentComponent>();
-		}
+		public BreakablePolearmsMissionBehavior() => _breakSoundIndex = SoundEvent.GetEventIdFromString("event:/mission/combat/shield/broken");
 
 		public override void OnAgentBuild(Agent agent, Banner banner)
 		{
 			if (agent.IsHuman)
 			{
-				BreakablePolearmsAgentComponent agentComponent = new BreakablePolearmsAgentComponent(agent);
-
-				agent.AddComponent(agentComponent);
-
-				_agentComponents.Add(agent, agentComponent);
+				agent.AddComponent(new BreakablePolearmsAgentComponent(agent));
 
 				for (EquipmentIndex index = EquipmentIndex.WeaponItemBeginSlot; index < EquipmentIndex.ExtraWeaponSlot; index++)
 				{
@@ -40,8 +30,6 @@ namespace BreakablePolearms
 				}
 			}
 		}
-
-		public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow) => _agentComponents.Remove(affectedAgent);
 
 		public override void OnMeleeHit(Agent attacker, Agent victim, bool isCanceled, AttackCollisionData collisionData)
 		{
@@ -60,11 +48,7 @@ namespace BreakablePolearms
 				damageToWeapon = (int)(damageToWeapon * (attacker.IsMainAgent ? settings.DamageToPolearmsForPlayersMultiplier : settings.DamageToPolearmsForNonPlayersMultiplier));
 				hitPoints = MathF.Max(0, weapon.HitPoints - damageToWeapon);
 				attacker.ChangeWeaponHitPoints(attacker.GetPrimaryWieldedItemIndex(), (short)hitPoints);
-
-				if (_agentComponents.TryGetValue(attacker, out BreakablePolearmsAgentComponent agentComponent))
-				{
-					agentComponent.DamageWeapon();
-				}
+				attacker.GetComponent<BreakablePolearmsAgentComponent>().DamageWeapon();
 
 				if (hitPoints == 0)
 				{
