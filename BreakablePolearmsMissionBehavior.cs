@@ -80,9 +80,15 @@ namespace BreakablePolearms
 
 			if (agent != null && agent.GetPrimaryWieldedItemIndex() != EquipmentIndex.None && BreakablePolearmsHelper.IsWeaponBreakable(BreakablePolearmsHelper.GetWieldedWeapon(agent)))
 			{
-				// If a polearm is broken, remove it from the wielder and play a breaking sound.
+				// Find the frame of the agent's main hand.
+				MatrixFrame mainHandFrame = agent.AgentVisuals.GetGlobalFrame().TransformToParent(agent.AgentVisuals.GetSkeleton().GetBoneEntitialFrameWithIndex(agent.Monster.MainHandItemBoneIndex));
+
+				// If a polearm is broken, remove it from the wielder, emit wood breaking particles and play a breaking sound.
 				agent.RemoveEquippedWeapon(agent.GetPrimaryWieldedItemIndex());
-				Mission.MakeSound(_breakSoundIndex, agent.Position, false, true, -1, -1);
+				Mission.AddParticleSystemBurstByName("psys_game_wood_splinter_a", mainHandFrame, false);
+				Mission.AddParticleSystemBurstByName("psys_game_wood_splinter_a", mainHandFrame, false);
+				Mission.AddParticleSystemBurstByName("psys_game_wood_dust_a", mainHandFrame, false);
+				Mission.MakeSound(_breakSoundIndex, mainHandFrame.origin, false, true, -1, -1);
 			}
 		}
 	}

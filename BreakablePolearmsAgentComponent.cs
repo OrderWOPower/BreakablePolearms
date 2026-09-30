@@ -4,16 +4,14 @@ namespace BreakablePolearms
 {
 	public class BreakablePolearmsAgentComponent : AgentComponent
 	{
-		private int _weaponHitPoints, _weaponIndex;
-
-		public bool IsWeaponTakingDamage { get; private set; }
+		private bool _isWeaponTakingDamage;
+		private int _weaponIndex, _weaponHitPoints;
 
 		public BreakablePolearmsAgentComponent(Agent agent) : base(agent)
 		{
-			IsWeaponTakingDamage = false;
-
-			_weaponHitPoints = 0;
+			_isWeaponTakingDamage = false;
 			_weaponIndex = -1;
+			_weaponHitPoints = 0;
 		}
 
 		public override void OnTick(float dt)
@@ -24,7 +22,7 @@ namespace BreakablePolearms
 			{
 				if ((int)Agent.GetPrimaryWieldedItemIndex() == _weaponIndex)
 				{
-					if (!IsWeaponTakingDamage)
+					if (!_isWeaponTakingDamage)
 					{
 						if (weapon.HitPoints >= _weaponHitPoints)
 						{
@@ -38,29 +36,26 @@ namespace BreakablePolearms
 					}
 					else
 					{
-						IsWeaponTakingDamage = false;
-
+						_isWeaponTakingDamage = false;
 						_weaponHitPoints = weapon.HitPoints;
 					}
 				}
 				else
 				{
-					IsWeaponTakingDamage = false;
-
-					_weaponHitPoints = 0;
+					_isWeaponTakingDamage = false;
 					_weaponIndex = (int)Agent.GetPrimaryWieldedItemIndex();
+					_weaponHitPoints = 0;
 				}
 
 			}
 			else
 			{
-				IsWeaponTakingDamage = false;
-
-				_weaponHitPoints = 0;
+				_isWeaponTakingDamage = false;
 				_weaponIndex = -1;
+				_weaponHitPoints = 0;
 			}
 		}
 
-		public void DamageWeapon() => IsWeaponTakingDamage = true;
+		public void DamageWeapon() => _isWeaponTakingDamage = true;
 	}
 }
