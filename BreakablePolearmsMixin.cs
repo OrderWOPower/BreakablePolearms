@@ -1,6 +1,6 @@
-﻿using Bannerlord.UIExtenderEx.Attributes;
+﻿using System;
+using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
-using System;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.ViewModelCollection;
